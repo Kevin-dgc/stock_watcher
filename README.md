@@ -3,9 +3,9 @@ and records the price of stocks (top 5 at 9:30) at 9:30, 9:30.30, 9:31-9:35 each
 This info is saved to a JSON file
 
 ```
-python3 -m venv venv && source venv/bin/activate.fish
+python3 -m venv venv && source venv/bin/activate.fish && pip install -r requirments.txt
 ```
 
 ```
-python3 -m venv venv && source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate && pip install -r requirments.txt 
 ```

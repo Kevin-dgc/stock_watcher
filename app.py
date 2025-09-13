@@ -44,10 +44,6 @@ def grabInfo():
         
     time.sleep(30)
     
-    for i in range(len(symbols)):
-        prices[i].append(yf.Ticker(symbols[i]).info.get('regularMarketPrice'))
-
-        
     for i in range(29):
         for i in range(len(symbols)):
             prices[i].append(yf.Ticker(symbols[i]).info.get('regularMarketPrice'))
