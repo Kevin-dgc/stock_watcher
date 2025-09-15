@@ -16,6 +16,7 @@ def runProgram():
         time.sleep(1)
 
 def grabInfo():
+    pause = 1
     prices = [[], [], [], [], []]
     symbols = []
     
@@ -37,26 +38,26 @@ def grabInfo():
         prices[i].append(symbols[i])
         prices[i].append(yf.Ticker(symbols[i]).info.get('regularMarketPrice'))
     
-    time.sleep(30)
+    time.sleep(30*pause)
     
     for i in range(len(symbols)):
         prices[i].append(yf.Ticker(symbols[i]).info.get('regularMarketPrice'))
         
-    time.sleep(30)
+    time.sleep(30*pause)
     
     for i in range(29):
         for i in range(len(symbols)):
             prices[i].append(yf.Ticker(symbols[i]).info.get('regularMarketPrice'))
-        time.sleep(60) # wait 1 min 5 times end at (10)
+        time.sleep(60*pause) # wait 1 min 5 times end at (10)
 
     # checks one more end of day time
-    time.sleep(21600)
+    time.sleep(21600*pause)
     for i in range(len(symbols)):
             prices[i].append(yf.Ticker(symbols[i]).info.get('regularMarketPrice'))
     
     
     #print(prices)
-    saveToJson(prices)
+    saveToJson_CustomFormat(prices)
     
 
 def saveToJson(total_info):
@@ -67,10 +68,34 @@ def saveToJson(total_info):
         vals = list[1:]
         data_in_json[key] = vals
 
-        filename = "stock_data.json"
-        with open(filename, "w") as file:
-            json.dump(data_in_json, file, indent=4)
+    filename = "stock_data.json"
+    with open(filename, "w") as file:
+        json.dump(data_in_json, file, indent=4)
 
+def saveToJson_CustomFormat(total_info):
+   
+    data_in_json = {}
+    
+    for stock_list in total_info:
+        if stock_list: 
+            key = str(stock_list[0]) 
+            vals = stock_list[1:] 
+            data_in_json[key] = vals
+    
+    filename = "stock_data.json"
+    with open(filename, "w") as file:
+        file.write("{\n")
+        items = list(data_in_json.items())
+        for i, (symbol, prices) in enumerate(items):
+            prices_str = ",".join(str(p) if p is not None else "null" for p in prices)
+            line = f'"{symbol}": [{prices_str}]'
+            if i < len(items) - 1:
+                line += ","
+            file.write(line + "\n")
+        file.write("}")
+    
+    #print(f"Successfully saved data for {len(data_in_json)} stocks to {filename}")
+        
 
 # grabInfo()
 runProgram()
