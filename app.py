@@ -74,7 +74,19 @@ def saveToJson(total_info):
 
 def saveToJson_CustomFormat(total_info):
    
-    data_in_json = {}
+    filename = "stock_data.json"
+    existing_data = {}
+    
+    try:
+        with open(filename, 'r') as file:
+            content = file.read()
+            if content:
+                existing_data = json.loads(content)
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+    
+    # Start with existing data instead of empty dict
+    data_in_json = existing_data.copy()
     
     for stock_list in total_info:
         if stock_list: 
@@ -82,7 +94,6 @@ def saveToJson_CustomFormat(total_info):
             vals = stock_list[1:] 
             data_in_json[key] = vals
     
-    filename = "stock_data.json"
     with open(filename, "w") as file:
         file.write("{\n")
         items = list(data_in_json.items())
@@ -97,9 +108,10 @@ def saveToJson_CustomFormat(total_info):
     #print(f"Successfully saved data for {len(data_in_json)} stocks to {filename}")
         
 
-# grabInfo()
+
+#grabInfo()
 runProgram()
-    
+#saveToJson_CustomFormat([["Aappl", "123", "123"]])   
     
     
     
